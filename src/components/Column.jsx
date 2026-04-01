@@ -1,5 +1,6 @@
 import { useDroppable } from '@dnd-kit/core'
 import TaskCard from './TaskCard'
+import './Board.css'
 
 function Column({
   id,
@@ -16,17 +17,9 @@ function Column({
   return (
     <div
       ref={setNodeRef}
-      style={{
-        background: isOver ? '#e0e0e0' : '#f4f4f4',
-        borderRadius: '8px',
-        padding: '12px',
-        minWidth: '200px',
-        minHeight: '400px',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
+      className={`task-column ${isOver ? 'is-over' : ''}`}
     >
-      <h3 style={{ margin: '0 0 12px' }}>{title} ({tasks.length})</h3>
+      <h3 className="column-title">{title} ({tasks.length})</h3>
 
       {tasks.length === 0 ? (
         <div style={{

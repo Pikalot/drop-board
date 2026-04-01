@@ -1,0 +1,55 @@
+.blue-button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: rgba(0, 0, 255, 0.849);
+  color: white;
+  font-size: 14px;
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.blue-button:hover {
+  background: rgba(0, 0, 255, 0.792);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.blue-button:active {
+  transform: translateY(0px);
+  box-shadow: none;
+}
+
+.board-container {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  background: blue;
+  justify-content: center;
+}
+
+.board-header {
+  padding: 24px 24px 0;
+  background: black;
+}
+
+.task-column {
+  background: #f4f4f4e5;
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 200px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.task-column.is-over {
+  background: #e0e0e0d5;
+}
+
+.column-title {
+  margin: 0 0 12px;
+  font-weight: bold;
+  font-style: italic;
+  color: black;
+}

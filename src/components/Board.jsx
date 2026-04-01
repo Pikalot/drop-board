@@ -3,6 +3,7 @@ import { DndContext } from '@dnd-kit/core'
 import { supabase } from '../supabaseClient'
 import Column from './Column'
 import NewTaskModal from './NewTaskModal'
+import './Board.css'
 
 const COLUMNS = ['todo', 'in_progress', 'in_review', 'done']
 
@@ -164,15 +165,10 @@ function Board() {
 
   return (
     <>
-      <div style={{ padding: '24px 24px 0' }}>
+      <div className='board-header'>
         <button
           onClick={() => setModalStatus('todo')}
-          style={{
-            padding: '8px 16px', borderRadius: '6px',
-            border: 'none', cursor: 'pointer',
-            background: '#4f46e5', color: 'white',
-            fontSize: '14px'
-          }}
+          className='blue-button'
         >
           + New Task
         </button>
@@ -181,8 +177,7 @@ function Board() {
       <DndContext onDragEnd={handleDragEnd}>
         <div
           onClick={() => setActiveMenu(null)}
-          style={{ display: 'flex', gap: '16px', padding: '24px' }}
-        >
+          className='board-container'>
           {COLUMNS.map(col => (
             <Column
               key={col}
