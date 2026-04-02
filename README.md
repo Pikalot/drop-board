@@ -3,7 +3,7 @@
 A Kanban-style task management app built with React and Supabase.
 
 ## Live Demo
-[\[Link to your Vercel deployment\]](https://drop-board-liard.vercel.app/)
+[\[Link to the Vercel deployment\]](https://drop-board-liard.vercel.app/)
 
 ## Features
 - Drag and drop tasks between columns
