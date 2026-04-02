@@ -5,13 +5,18 @@
   margin-bottom: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   position: relative;
+  cursor: grab;
 }
 
 .task-card-title {
-  cursor: grab;
+  cursor: pointer;
   margin-bottom: 4px;
   text-align: left;
   padding-right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: rgb(79, 78, 78);
 }
 
 .task-card-menu-button {
@@ -113,3 +118,59 @@ span.priority-badge.priority-normal {
 span.priority-badge.priority-low {
   background: rgb(79, 78, 78);
 }
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.detail-close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: black;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.detail-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #08060d;
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.detail-section {
+  text-align: left;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.detail-label {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #a5a3a3e5;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.detail-value {
+  font-size: 14px;
+  color: rgb(79, 78, 78);
+  line-height: 1.5;
+}
+
+.delete-button {
+  border: 1px solid #e11d48;
+  background: white;
+  color: #e11d48;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+

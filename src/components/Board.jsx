@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { DndContext } from '@dnd-kit/core'
+import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { supabase } from '../supabaseClient'
 import Column from './Column'
 import NewTaskModal from './NewTaskModal'
+import TaskDetailModal from './TaskDetailModal'
 import './Board.css'
 
 const COLUMNS = ['todo', 'in_progress', 'in_review', 'done']
@@ -22,6 +23,12 @@ function Board() {
   const [modalStatus, setModalStatus] = useState(null) // null = closed
   const [activeMenu, setActiveMenu] = useState(null)
   const [editingTask, setEditingTask] = useState(null)
+  const [search, setSearch] = useState('')        
+  const [searchResult, setSearchResult] = useState(null)
+
+  const filteredTasks = tasks.filter(t =>
+    t.title.toLowerCase().includes(search.toLowerCase())
+  )
 
   // Sign in as guest on load
   useEffect(() => {
@@ -72,7 +79,7 @@ function Board() {
     fetchTasks()
   }, [user])
 
-  // Handle drag and drop → update in Supabase
+  // Handle drag and drop, update in Supabase
   async function handleDragEnd(event) {
     const { active, over } = event
     if (!over) return
@@ -100,12 +107,13 @@ function Board() {
   }
 
   // Create new tasks
-  async function handleCreateTask({ title, priority }) {
+  async function handleCreateTask({ title, description, priority }) {
     try {
       const { data, error } = await supabase
         .from('tasks')
         .insert([{
           title,
+          description,
           priority,
           status: 'todo',
           user_id: user.id
@@ -138,20 +146,20 @@ function Board() {
   }
 
   // Edit a task
-  async function handleEditTask({ title, priority, status }) {
+  async function handleEditTask({ title, description, priority, status }) {
     const taskId = editingTask.id
 
     // Optimistic update
     setTasks(prev =>
       prev.map(task =>
-        task.id === taskId ? { ...task, title, priority, status } : task
+        task.id === taskId ? { ...task, title, description, priority, status } : task
       )
     )
     setEditingTask(null)
 
     const { error } = await supabase
       .from('tasks')
-      .update({ title, priority, status })
+      .update({ title, description, priority, status })
       .eq('id', taskId)
 
     if (error) {
@@ -160,12 +168,46 @@ function Board() {
     }
   }
 
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 8, // must move 8px before drag starts
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250, // must hold 250ms before drag starts on touch
+        tolerance: 5,
+      },
+    })
+  )
+
+  // Search function
+  function handleSearch() {
+    if (!search.trim()) return
+    const match = filteredTasks[0]
+    if (match) setSearchResult(match)
+  }
+
   if (loading) return <p>Loading your board...</p>
   if (error) return <p>Error: {error}</p>
 
   return (
     <>
       <div className='board-header'>
+        <div className='search-wrapper'>
+          <input
+            type='text'
+            placeholder='Search tasks...'
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleSearch()}
+            className='search-input'
+          />
+          <button className='search-button' onClick={handleSearch}>
+            🔍
+          </button>
+        </div>
         <button
           onClick={() => setModalStatus('todo')}
           className='blue-button button-text'
@@ -174,7 +216,7 @@ function Board() {
         </button>
       </div>
 
-      <DndContext onDragEnd={handleDragEnd}>
+      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
         <div
           onClick={() => setActiveMenu(null)}
           className='board-container'>
@@ -183,7 +225,7 @@ function Board() {
               key={col}
               id={col}
               title={COLUMN_LABELS[col]}
-              tasks={tasks.filter(t => t.status === col)}
+              tasks={filteredTasks.filter(t => t.status === col)}
               onDelete={handleDeleteTask}
               onEdit={setEditingTask}
               onAddTask={(status) => setModalStatus(status)}
@@ -207,6 +249,15 @@ function Board() {
           onClose={() => setEditingTask(null)}
           onSubmit={handleEditTask}
           editTask={editingTask}
+        />
+      )}
+
+      {searchResult && (
+        <TaskDetailModal
+          task={searchResult}
+          onClose={() => { setSearchResult(null); setSearch('') }}
+          onEdit={(task) => { setSearchResult(null); setSearch(''); setEditingTask(task) }}
+          onDelete={(id) => { setSearchResult(null); setSearch(''); handleDeleteTask(id) }}
         />
       )}
     </>
