@@ -21,6 +21,11 @@
   gap: 12px;
 }
 
+.modal-title {
+  font-style: italic;
+  font-weight: 600;
+}
+
 .modal {
   padding: 8px;
   border-radius: 6px;
@@ -77,3 +82,9 @@ button:hover {
   background: white;
 }
 
+@media (prefers-color-scheme: dark) {
+  .white-button,
+  .modal-title {
+    color: black;
+  }
+}

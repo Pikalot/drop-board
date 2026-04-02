@@ -182,3 +182,14 @@
     border-right-color: var(--border);
   }
 }
+
+.app-title {
+  color: darkblue;
+  font-style: italic;
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-title {
+    color: white;
+  }
+}

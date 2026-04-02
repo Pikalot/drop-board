@@ -1,16 +1,78 @@
-# React + Vite
+# Drop Board
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Kanban-style task management app built with React and Supabase.
 
-Currently, two official plugins are available:
+## Live Demo
+[\[Link to your Vercel deployment\]](https://drop-board-liard.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
+- Drag and drop tasks between columns
+- Guest accounts with anonymous auth
+- Create, edit, and delete tasks
+- Priority badges (High, Normal, Low)
+- Search tasks by title
+- Task detail modal
+- Responsive design
+- Row Level Security — users only see their own tasks
 
-## React Compiler
+## Tech Stack
+- React (Vite)
+- Supabase (PostgreSQL + Auth)
+- @dnd-kit (drag and drop)
+- Vercel (hosting)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Setup Instructions
+1. Clone the repo
+2. Run `npm install`
+3. Create a `.env` file with:
+```
+   VITE_SUPABASE_URL=your_url
+   VITE_SUPABASE_ANON_KEY=your_key
+```
+4. Run `npm run dev`
 
-## Expanding the ESLint configuration
+## Database Schema
+```
+-- Enums
+create type task_status as enum (
+  'unassigned', 'todo', 'in_progress', 'in_review', 'done'
+);
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+create type task_priority as enum (
+  'low', 'normal', 'high'
+);
+
+-- Tables
+create table tasks (
+  id uuid default gen_random_uuid() primary key,
+  title text not null,
+  status task_status not null default 'unassigned',
+  priority task_priority default 'normal',
+  description text,
+  due_date date,
+  user_id uuid references auth.users(id),
+  created_at timestamp with time zone default now()
+);
+
+-- RLS Policies
+alter table tasks enable row level security;
+
+-- Policy: users can view their own tasks
+create policy "Users can view own tasks" on tasks
+  for select using (auth.uid() = user_id);
+
+-- Policy: users can insert their own tasks
+create policy "Users can insert own tasks"
+  on tasks for insert
+  with check (auth.uid() = user_id);
+
+-- Policy: users can update their own tasks
+create policy "Users can update own tasks"
+  on tasks for update
+  using (auth.uid() = user_id);
+
+-- Policy: users can delete their own tasks
+create policy "Users can delete own tasks"
+  on tasks for delete
+  using (auth.uid() = user_id);
+```

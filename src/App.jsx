@@ -1,9 +1,10 @@
 import Board from './components/Board'
+import './App.css'
 
 function App() {
   return (
     <div>
-      <h1 style={{ color: 'darkblue', fontStyle: 'italic' }}>Task Board</h1>
+      <h1 className="app-title">Task Board</h1>
       <Board />
     </div>
   )

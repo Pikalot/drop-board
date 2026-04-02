@@ -152,3 +152,33 @@
   border-color: #4f46e5;
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
+
+@media (max-width: 768px) {
+  .board-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .task-column {
+    width: 100%;
+    min-width: unset;
+    max-width: 500px;
+    min-height: 350px;
+  }
+
+  .board-header {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 16px 0;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .blue-button {
+    width: 100%;
+  }
+}

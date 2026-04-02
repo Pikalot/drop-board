@@ -24,7 +24,7 @@
     return (
       <div className='modal-overlay'>
         <div className='modal-content'>
-          <h2 style={{ margin: 0 }}>{isEditing ? 'Edit Task' : 'New Task'}</h2>
+          <h2 className='modal-title'>{isEditing ? 'Edit Task' : 'New Task'}</h2>
 
           <input
             type="text"
