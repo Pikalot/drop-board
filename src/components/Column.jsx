@@ -22,16 +22,10 @@ function Column({
       <h3 className="column-title">{title} ({tasks.length})</h3>
 
       {tasks.length === 0 ? (
-        <div style={{
-          textAlign: 'center',
-          marginTop: '40px',
-          color: '#bbb',
-          fontSize: '13px',
-          userSelect: 'none',
-        }}>
-          <div style={{ fontSize: '24px', marginBottom: '8px' }}>·····</div>
-          <p style={{ margin: 0 }}>No tasks here</p>
-          <p style={{ margin: '4px 0 8px', fontSize: '11px' }}>Drop a task here</p>
+        <div className='empty-column'>
+          <div className='separator-dots'>·····</div>
+          <p>No tasks yet</p>
+          <p className='button-text'>Drop a task here</p>
         </div>
       ) : (
         tasks.map(task => (
@@ -48,17 +42,7 @@ function Column({
 
       <button
         onClick={() => onAddTask(id)}
-        style={{
-          marginTop: 'auto',
-          padding: '8px',
-          background: 'none',
-          border: '1px dashed #ccc',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          color: '#999',
-          fontSize: '13px',
-          width: '100%',
-        }}
+        className='gray-button button-text'
       >
         + Add task
       </button>

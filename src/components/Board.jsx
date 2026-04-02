@@ -168,7 +168,7 @@ function Board() {
       <div className='board-header'>
         <button
           onClick={() => setModalStatus('todo')}
-          className='blue-button'
+          className='blue-button button-text'
         >
           + New Task
         </button>
